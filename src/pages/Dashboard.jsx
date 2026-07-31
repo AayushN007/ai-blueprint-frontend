@@ -1,135 +1,164 @@
+import {
+  FolderKanban,
+  Database,
+  Brain,
+  FlaskConical,
+  CircleCheck,
+} from "lucide-react";
+
+import { motion } from "framer-motion";
 import Sidebar from "../components/Sidebar";
 
 function Dashboard() {
   const stats = [
-    { title: "Projects", value: 5 },
-    { title: "Datasets", value: 12 },
-    { title: "Models", value: 8 },
-    { title: "Experiments", value: 18 },
+    {
+      title: "Projects",
+      value: 5,
+      icon: FolderKanban,
+    },
+    {
+      title: "Datasets",
+      value: 12,
+      icon: Database,
+    },
+    {
+      title: "Models",
+      value: 8,
+      icon: Brain,
+    },
+    {
+      title: "Experiments",
+      value: 18,
+      icon: FlaskConical,
+    },
   ];
 
-  const recentProjects = [
+  const projects = [
     "Student Performance Prediction",
     "House Price Prediction",
     "Customer Churn Prediction",
   ];
 
   const agents = [
-    { name: "Dataset Discovery Agent", status: "Online" },
-    { name: "Model Recommendation Agent", status: "Online" },
-    { name: "Experiment Planner", status: "Online" },
-    { name: "Responsible AI Checker", status: "Online" },
+    "Dataset Discovery Agent",
+    "Model Recommendation Agent",
+    "Experiment Planner",
+    "Responsible AI Checker",
   ];
 
   return (
-    <div className="flex bg-slate-950 text-white">
+    <div className="flex min-h-screen bg-slate-950 text-white">
 
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Main Content */}
-      <div className="flex-1 min-h-screen">
+      <main className="flex-1 p-8">
 
-        {/* Header */}
-        <header className="border-b border-slate-800 px-8 py-5 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-cyan-400">
-            AI Blueprint
-          </h1>
+        <header className="flex justify-between items-center mb-10">
+          <div>
+            <h1 className="text-4xl font-bold">
+              Dashboard
+            </h1>
 
-          <button className="bg-cyan-500 hover:bg-cyan-600 px-5 py-2 rounded-lg font-semibold transition">
+            <p className="text-gray-400 mt-2">
+              Monitor your AI project workflow
+            </p>
+          </div>
+
+          <button className="rounded-xl bg-cyan-500 px-6 py-3 font-semibold text-black hover:bg-cyan-400">
             + New Project
           </button>
         </header>
 
-        {/* Main */}
-        <main className="max-w-7xl mx-auto p-8">
 
-          <h2 className="text-4xl font-bold mb-8">
-            Dashboard
-          </h2>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
 
-          {/* Statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((item) => {
+            const Icon = item.icon;
 
-            {stats.map((item) => (
-              <div
+            return (
+              <motion.div
+                whileHover={{ y: -5 }}
                 key={item.title}
-                className="bg-slate-900 rounded-2xl p-6 border border-slate-800 hover:border-cyan-500 transition"
+                className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl"
               >
-                <h3 className="text-gray-400">
+                <Icon className="text-cyan-400" />
+
+                <p className="mt-5 text-gray-400">
                   {item.title}
-                </h3>
-
-                <p className="text-4xl font-bold mt-3 text-cyan-400">
-                  {item.value}
                 </p>
-              </div>
-            ))}
 
-          </div>
+                <h2 className="text-4xl font-bold mt-2">
+                  {item.value}
+                </h2>
 
-          {/* Bottom Section */}
-          <div className="grid lg:grid-cols-3 gap-8 mt-12">
+              </motion.div>
+            );
+          })}
 
-            {/* Recent Projects */}
-            <div className="lg:col-span-2">
+        </div>
 
-              <h2 className="text-2xl font-bold mb-5">
-                Recent Projects
-              </h2>
 
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl">
+        <div className="grid lg:grid-cols-3 gap-8 mt-12">
 
-                {recentProjects.map((project) => (
-                  <div
-                    key={project}
-                    className="px-6 py-5 border-b border-slate-800 last:border-none hover:bg-slate-800 transition"
-                  >
-                    <h3 className="font-semibold text-lg">
-                      {project}
-                    </h3>
+          <div className="lg:col-span-2">
 
-                    <p className="text-gray-400 text-sm">
-                      Last updated 2 hours ago
-                    </p>
-                  </div>
-                ))}
+            <h2 className="text-2xl font-bold mb-5">
+              Recent Projects
+            </h2>
 
-              </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5">
 
-            </div>
+              {projects.map((project) => (
+                <div
+                  key={project}
+                  className="p-5 border-b border-white/10 last:border-none hover:bg-white/5 transition"
+                >
+                  <h3 className="font-semibold">
+                    {project}
+                  </h3>
 
-            {/* AI Agent Status */}
-            <div>
-
-              <h2 className="text-2xl font-bold mb-5">
-                AI Agent Status
-              </h2>
-
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-
-                {agents.map((agent) => (
-                  <div
-                    key={agent.name}
-                    className="flex justify-between items-center mb-5 last:mb-0"
-                  >
-                    <span>{agent.name}</span>
-
-                    <span className="text-green-400 font-semibold">
-                      ● {agent.status}
-                    </span>
-                  </div>
-                ))}
-
-              </div>
+                  <p className="text-sm text-gray-400 mt-1">
+                    Updated recently
+                  </p>
+                </div>
+              ))}
 
             </div>
 
           </div>
 
-        </main>
 
-      </div>
+          <div>
+
+            <h2 className="text-2xl font-bold mb-5">
+              AI Agents
+            </h2>
+
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-5">
+
+              {agents.map((agent) => (
+                <div
+                  key={agent}
+                  className="flex items-center justify-between"
+                >
+                  <span className="text-sm">
+                    {agent}
+                  </span>
+
+                  <CircleCheck
+                    size={20}
+                    className="text-green-400"
+                  />
+                </div>
+              ))}
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </main>
 
     </div>
   );
