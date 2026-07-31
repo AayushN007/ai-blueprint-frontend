@@ -1,27 +1,44 @@
+import { ArrowRight, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+
 function Hero() {
   return (
-    <section className="bg-slate-950 text-white min-h-[85vh] flex items-center">
-      <div className="max-w-7xl mx-auto px-6">
-        <h1 className="text-6xl font-extrabold leading-tight">
-          Build Your
-          <span className="text-cyan-400"> AI/ML Blueprint </span>
-          in Minutes
-        </h1>
+    <section className="relative min-h-screen overflow-hidden bg-slate-950 text-white flex items-center">
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-transparent to-blue-600/20" />
 
-        <p className="mt-6 text-xl text-gray-400 max-w-2xl">
-          Generate datasets, model recommendations, project structure,
-          implementation roadmap, and starter code—all powered by AI.
-        </p>
+      <div className="relative mx-auto max-w-7xl px-6 pt-20">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <div className="mb-6 flex items-center gap-2 text-cyan-400">
+            <Sparkles size={20} />
+            AI Powered Project Builder
+          </div>
 
-        <div className="mt-10 flex gap-4">
-          <button className="bg-cyan-500 hover:bg-cyan-600 px-6 py-3 rounded-xl font-semibold">
-            Create Project
-          </button>
+          <h1 className="max-w-4xl text-6xl font-extrabold leading-tight">
+            Build AI Projects
+            <span className="text-cyan-400"> Smarter.</span>
+          </h1>
 
-          <button className="border border-cyan-500 text-cyan-400 px-6 py-3 rounded-xl">
-            Learn More
-          </button>
-        </div>
+          <p className="mt-6 max-w-2xl text-xl text-gray-400">
+            AI Blueprint helps you generate complete machine learning project
+            blueprints including datasets, models, architecture, and code
+            recommendations.
+          </p>
+
+          <div className="mt-10 flex gap-4">
+            <button className="flex items-center gap-2 rounded-xl bg-cyan-500 px-7 py-3 font-semibold text-black hover:bg-cyan-400">
+              Get Started
+              <ArrowRight size={18} />
+            </button>
+
+            <button className="rounded-xl border border-cyan-400 px-7 py-3 text-cyan-400 hover:bg-cyan-400/10">
+              View Demo
+            </button>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

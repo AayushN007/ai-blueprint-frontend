@@ -1,54 +1,60 @@
+import { Database, Brain, FileText, Code } from "lucide-react";
+
 function Features() {
   const features = [
     {
       title: "Dataset Recommendation",
-      description:
-        "Receive AI-powered dataset suggestions tailored to your project idea.",
+      description: "Find suitable datasets automatically using AI analysis.",
+      icon: Database,
     },
     {
       title: "Model Recommendation",
-      description:
-        "Get the most suitable ML algorithms with explanations and evaluation metrics.",
+      description: "Choose optimized ML models with reasoning.",
+      icon: Brain,
     },
     {
       title: "Project Blueprint",
-      description:
-        "Generate a complete AI/ML workflow, architecture, and implementation roadmap.",
+      description: "Generate complete AI project architecture.",
+      icon: FileText,
     },
     {
       title: "Code Generation",
-      description:
-        "Download starter files including train.py, predict.py, Dockerfile, and more.",
+      description: "Download ready-to-use project starter files.",
+      icon: Code,
     },
   ];
 
   return (
-    <section className="bg-slate-900 py-20 text-white">
-      <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center">
-          What Our Platform Offers
+    <section className="bg-slate-900 py-24 text-white">
+      <div className="mx-auto max-w-7xl px-6">
+
+        <h2 className="text-center text-4xl font-bold">
+          Everything You Need To Build AI
         </h2>
 
-        <p className="text-center text-gray-400 mt-4">
-          Everything you need to kickstart your AI/ML project.
-        </p>
+        <div className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {features.map((feature) => {
+            const Icon = feature.icon;
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-14">
-          {features.map((feature) => (
-            <div
-              key={feature.title}
-              className="bg-slate-800 p-6 rounded-2xl hover:scale-105 transition duration-300"
-            >
-              <h3 className="text-xl font-semibold text-cyan-400">
-                {feature.title}
-              </h3>
+            return (
+              <div
+                key={feature.title}
+                className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl transition hover:-translate-y-2"
+              >
+                <Icon className="text-cyan-400" size={32} />
 
-              <p className="mt-4 text-gray-300 text-sm">
-                {feature.description}
-              </p>
-            </div>
-          ))}
+                <h3 className="mt-5 text-xl font-semibold">
+                  {feature.title}
+                </h3>
+
+                <p className="mt-3 text-gray-400">
+                  {feature.description}
+                </p>
+              </div>
+            );
+          })}
         </div>
+
       </div>
     </section>
   );

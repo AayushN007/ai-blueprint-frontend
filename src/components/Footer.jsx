@@ -1,9 +1,10 @@
 function Footer() {
   return (
-    <footer className="bg-slate-950 text-gray-400 py-8 text-center border-t border-slate-800">
+    <footer className="border-t border-white/10 bg-slate-950 py-8 text-center text-gray-400">
       <p>© 2026 AI Blueprint. All rights reserved.</p>
+
       <p className="mt-2 text-sm">
-        Built using React, Tailwind CSS, FastAPI, and AI Agents.
+        Built with React, Tailwind CSS, FastAPI, and AI Agents.
       </p>
     </footer>
   );
