@@ -1,5 +1,5 @@
 import Sidebar from "../components/Sidebar";
-import { Brain, CheckCircle } from "lucide-react";
+import { Brain, CheckCircle, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 function ModelRecommendation() {
@@ -8,6 +8,7 @@ function ModelRecommendation() {
       name: "Random Forest",
       type: "Classification",
       accuracy: "High",
+      score: "94%",
       reason:
         "Handles complex relationships and works well with structured datasets.",
     },
@@ -15,6 +16,7 @@ function ModelRecommendation() {
       name: "XGBoost",
       type: "Gradient Boosting",
       accuracy: "Very High",
+      score: "97%",
       reason:
         "Strong performance for tabular data with excellent optimization.",
     },
@@ -22,6 +24,7 @@ function ModelRecommendation() {
       name: "Neural Network",
       type: "Deep Learning",
       accuracy: "High",
+      score: "91%",
       reason:
         "Suitable for large datasets and complex pattern recognition.",
     },
@@ -35,34 +38,56 @@ function ModelRecommendation() {
       <main className="flex-1 p-8">
 
         <div className="mb-10">
-          <h1 className="text-4xl font-bold">
+
+          <div className="flex items-center gap-2 text-cyan-400">
+            <Sparkles size={22} />
+            AI Model Selection Agent
+          </div>
+
+          <h1 className="mt-3 text-4xl font-bold">
             Model Recommendation
           </h1>
 
           <p className="mt-2 text-gray-400">
             AI recommended models based on your dataset and objective.
           </p>
+
         </div>
 
 
         <div className="grid gap-6 lg:grid-cols-3">
 
           {models.map((model) => (
+
             <motion.div
               key={model.name}
-              whileHover={{ y: -6 }}
+              whileHover={{ y: -8 }}
               className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl"
             >
 
-              <Brain className="text-cyan-400" size={32} />
+              <div className="flex justify-between items-start">
+
+                <Brain
+                  className="text-cyan-400"
+                  size={34}
+                />
+
+                <span className="rounded-full bg-cyan-400/10 px-3 py-1 text-sm text-cyan-400">
+                  {model.score}
+                </span>
+
+              </div>
+
 
               <h2 className="mt-5 text-2xl font-bold">
                 {model.name}
               </h2>
 
+
               <p className="mt-2 text-cyan-400">
                 {model.type}
               </p>
+
 
               <p className="mt-4 text-gray-400">
                 {model.reason}
@@ -80,6 +105,7 @@ function ModelRecommendation() {
               </button>
 
             </motion.div>
+
           ))}
 
         </div>
