@@ -2,17 +2,40 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { Sparkles, Check } from "lucide-react";
+import { createProject } from "../services/api";
 
 function CreateProject() {
   const navigate = useNavigate();
 
   const [step, setStep] = useState(1);
 
+  const [project, setProject] = useState({
+    name: "",
+    domain: "Education",
+    description: "",
+  });
+
   const steps = [
     "Project Details",
     "AI Understanding",
     "Generate Blueprint",
   ];
+
+
+  async function handleCreateProject() {
+    try {
+      const response = await createProject(project);
+
+      console.log(response);
+
+      navigate("/chat");
+
+    } catch (error) {
+      console.error(error);
+      alert("Backend connection failed");
+    }
+  }
+
 
   return (
     <div className="flex min-h-screen bg-slate-950 text-white">
@@ -32,8 +55,6 @@ function CreateProject() {
         </div>
 
 
-        {/* Steps */}
-
         <div className="mb-10 flex gap-4">
 
           {steps.map((item, index) => (
@@ -45,12 +66,7 @@ function CreateProject() {
                   : "bg-white/5 text-gray-400"
               }`}
             >
-              {step > index + 1 ? (
-                <Check size={18} />
-              ) : (
-                index + 1
-              )}
-
+              {step > index + 1 ? <Check size={18}/> : index + 1}
               {item}
             </div>
           ))}
@@ -58,7 +74,7 @@ function CreateProject() {
         </div>
 
 
-        <div className="max-w-4xl rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+        <div className="max-w-4xl rounded-2xl border border-white/10 bg-white/5 p-8">
 
 
           {step === 1 && (
@@ -72,11 +88,25 @@ function CreateProject() {
 
               <input
                 placeholder="Project Name"
-                className="mb-5 w-full rounded-xl bg-slate-900 p-4 outline-none focus:ring-2 focus:ring-cyan-500"
+                value={project.name}
+                onChange={(e)=>
+                  setProject({
+                    ...project,
+                    name:e.target.value
+                  })
+                }
+                className="mb-5 w-full rounded-xl bg-slate-900 p-4"
               />
 
 
               <select
+                value={project.domain}
+                onChange={(e)=>
+                  setProject({
+                    ...project,
+                    domain:e.target.value
+                  })
+                }
                 className="mb-5 w-full rounded-xl bg-slate-900 p-4"
               >
                 <option>Healthcare</option>
@@ -90,53 +120,51 @@ function CreateProject() {
               <textarea
                 rows="5"
                 placeholder="Describe your AI problem..."
-                className="w-full rounded-xl bg-slate-900 p-4 outline-none focus:ring-2 focus:ring-cyan-500"
+                value={project.description}
+                onChange={(e)=>
+                  setProject({
+                    ...project,
+                    description:e.target.value
+                  })
+                }
+                className="w-full rounded-xl bg-slate-900 p-4"
               />
-
 
             </>
           )}
 
 
-
           {step === 2 && (
             <div>
-
               <h2 className="text-2xl font-bold mb-5">
                 AI Requirements
               </h2>
 
               <p className="text-gray-400">
-                AI agents will ask questions about your problem,
-                data, constraints, and expected output.
+                AI agents will analyze your project requirements.
               </p>
-
             </div>
           )}
 
 
-
           {step === 3 && (
             <div>
-
               <h2 className="text-2xl font-bold mb-5">
                 Ready To Generate
               </h2>
 
               <p className="text-gray-400">
-                Your AI blueprint will be created.
+                Your project will be sent to AI Blueprint engine.
               </p>
-
             </div>
           )}
-
 
 
           <div className="mt-8 flex gap-4">
 
             {step > 1 && (
               <button
-                onClick={() => setStep(step - 1)}
+                onClick={()=>setStep(step-1)}
                 className="rounded-xl border border-white/20 px-6 py-3"
               >
                 Back
@@ -145,16 +173,18 @@ function CreateProject() {
 
 
             {step < 3 ? (
+
               <button
-                onClick={() => setStep(step + 1)}
+                onClick={()=>setStep(step+1)}
                 className="rounded-xl bg-cyan-500 px-6 py-3 font-semibold text-black"
               >
                 Continue
               </button>
+
             ) : (
 
               <button
-                onClick={() => navigate("/chat")}
+                onClick={handleCreateProject}
                 className="rounded-xl bg-cyan-500 px-6 py-3 font-semibold text-black"
               >
                 Start AI Chat
