@@ -8,7 +8,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 function Sidebar() {
   const menu = [
@@ -21,22 +21,29 @@ function Sidebar() {
   ];
 
   return (
-    <aside className="hidden md:block w-72 min-h-screen bg-slate-950 border-r border-white/10 text-white">
+    <aside className="w-72 min-h-screen bg-slate-900 border-r border-slate-800">
 
-      <div className="p-8">
-        <div className="flex items-center gap-2">
+      {/* Logo */}
+      <Link
+        to="/"
+        className="block p-8"
+      >
+        <div className="flex items-center gap-2 text-3xl font-bold">
           <Sparkles className="text-cyan-400" />
-          <h1 className="text-2xl font-bold">
+
+          <span>
             AI <span className="text-cyan-400">Blueprint</span>
-          </h1>
+          </span>
         </div>
 
-        <p className="text-gray-400 mt-3 text-sm">
+        <p className="text-gray-400 mt-2">
           AI/ML Project Assistant
         </p>
-      </div>
+      </Link>
 
-      <nav className="mt-6 space-y-2 px-4">
+
+      <nav className="mt-4">
+
         {menu.map((item) => {
           const Icon = item.icon;
 
@@ -45,18 +52,19 @@ function Sidebar() {
               key={item.name}
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center gap-4 rounded-xl px-5 py-3 transition ${
+                `flex items-center gap-4 px-8 py-4 transition ${
                   isActive
-                    ? "bg-cyan-500 text-black font-semibold"
-                    : "text-gray-300 hover:bg-white/5 hover:text-cyan-400"
+                    ? "bg-cyan-500 text-black"
+                    : "text-gray-300 hover:bg-slate-800 hover:text-cyan-400"
                 }`
               }
             >
-              <Icon size={20} />
-              {item.name}
+              <Icon size={22} />
+              <span>{item.name}</span>
             </NavLink>
           );
         })}
+
       </nav>
 
     </aside>
