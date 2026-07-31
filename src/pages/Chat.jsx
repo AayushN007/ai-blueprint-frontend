@@ -1,14 +1,19 @@
+import { useState } from "react";
 import Sidebar from "../components/Sidebar";
+import { Bot, Send } from "lucide-react";
+import { motion } from "framer-motion";
 
 function Chat() {
+  const [message, setMessage] = useState("");
+
   const messages = [
     {
-      sender: "AI",
-      text: "Hello! I'll help you generate the perfect AI/ML project blueprint.",
+      sender: "AI Agent",
+      text: "Hello! I'll help you create your AI project blueprint.",
     },
     {
-      sender: "AI",
-      text: "First question: What is your target variable?",
+      sender: "AI Agent",
+      text: "What is the main objective of your machine learning project?",
     },
   ];
 
@@ -17,48 +22,73 @@ function Chat() {
 
       <Sidebar />
 
-      <div className="flex-1 p-10">
+      <main className="flex-1 p-8">
 
-        <h1 className="text-4xl font-bold mb-8">
-          AI Clarification Chat
-        </h1>
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold">
+            AI Clarification Chat
+          </h1>
 
-        <div className="bg-slate-900 rounded-2xl border border-slate-800 p-6">
+          <p className="mt-2 text-gray-400">
+            Discuss your project requirements with AI agents.
+          </p>
+        </div>
 
-          <div className="space-y-4 mb-8">
-            {messages.map((message, index) => (
-              <div
+
+        <div className="flex h-[70vh] flex-col rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl">
+
+
+          <div className="flex-1 space-y-5 overflow-y-auto p-6">
+
+            {messages.map((msg, index) => (
+              <motion.div
                 key={index}
-                className="bg-slate-800 rounded-xl p-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="max-w-2xl rounded-2xl bg-slate-900 p-5"
               >
-                <p className="text-cyan-400 font-semibold">
-                  {message.sender}
+
+                <div className="mb-2 flex items-center gap-2 text-cyan-400">
+                  <Bot size={18} />
+                  {msg.sender}
+                </div>
+
+                <p className="text-gray-200">
+                  {msg.text}
                 </p>
 
-                <p className="mt-2">
-                  {message.text}
-                </p>
-              </div>
+              </motion.div>
             ))}
-          </div>
-
-          <div className="flex gap-4">
-
-            <input
-              type="text"
-              placeholder="Type your answer..."
-              className="flex-1 bg-slate-800 rounded-lg p-4 outline-none"
-            />
-
-            <button className="bg-cyan-500 hover:bg-cyan-600 px-6 rounded-lg">
-              Send
-            </button>
 
           </div>
+
+
+          <div className="border-t border-white/10 p-5">
+
+            <div className="flex gap-4">
+
+              <input
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Type your answer..."
+                className="flex-1 rounded-xl bg-slate-900 px-5 py-3 outline-none focus:ring-2 focus:ring-cyan-500"
+              />
+
+              <button
+                className="flex items-center gap-2 rounded-xl bg-cyan-500 px-6 font-semibold text-black hover:bg-cyan-400"
+              >
+                <Send size={18} />
+                Send
+              </button>
+
+            </div>
+
+          </div>
+
 
         </div>
 
-      </div>
+      </main>
 
     </div>
   );
