@@ -1,12 +1,42 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { RouterProvider } from "react-router-dom";
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-import "./index.css";
-import router from "./router";
+from app.routes import projects
+from app.routes import datasets
+from app.routes import models
+from app.routes import blueprint
+from app.routes import chat
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
-);
+
+app = FastAPI(
+    title="AI Blueprint API",
+    version="1.0.0"
+)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:5174"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# API Routes
+
+app.include_router(projects.router)
+app.include_router(datasets.router)
+app.include_router(models.router)
+app.include_router(blueprint.router)
+app.include_router(chat.router)
+
+
+@app.get("/")
+def home():
+    return {
+        "message": "AI Blueprint Backend Running"
+    }
