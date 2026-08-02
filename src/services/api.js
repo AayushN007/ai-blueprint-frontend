@@ -1,49 +1,41 @@
-const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API_URL = "http://127.0.0.1:8000";
 
-async function request(endpoint, options = {}) {
-  const response = await fetch(`${API_URL}${endpoint}`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    ...options,
-  });
-
-  if (!response.ok) {
-    throw new Error("API request failed");
-  }
-
-  return response.json();
+export async function chat(message) {
+  return fetch(`${API_URL}/chat/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message })
+  }).then(r => r.json());
 }
 
-
-export function createProject(data) {
-  return request("/projects", {
+export async function createProject(data) {
+  return fetch(`${API_URL}/projects/`, {
     method: "POST",
-    body: JSON.stringify(data),
-  });
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  }).then(r => r.json());
 }
 
-
-export function getDatasets(data) {
-  return request("/datasets/recommend", {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
+export async function getProjects() {
+  return fetch(`${API_URL}/projects/`).then(r => r.json());
 }
 
-
-export function getModels(data) {
-  return request("/models/recommend", {
+export async function getDatasets() {
+  return fetch(`${API_URL}/datasets/recommend`, {
     method: "POST",
-    body: JSON.stringify(data),
-  });
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({})
+  }).then(r => r.json());
 }
 
-
-export function generateBlueprint(data) {
-  return request("/blueprint/generate", {
+export async function getModels() {
+  return fetch(`${API_URL}/models/recommend`, {
     method: "POST",
-    body: JSON.stringify(data),
-  });
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({})
+  }).then(r => r.json());
+}
+
+export async function getBlueprint() {
+  return fetch(`${API_URL}/download/`).then(r => r.json());
 }

@@ -1,117 +1,56 @@
+import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
-import { Brain, CheckCircle, Sparkles } from "lucide-react";
+import { Brain } from "lucide-react";
 import { motion } from "framer-motion";
 
 function ModelRecommendation() {
-  const models = [
-    {
-      name: "Random Forest",
-      type: "Classification",
-      accuracy: "High",
-      score: "94%",
-      reason:
-        "Handles complex relationships and works well with structured datasets.",
-    },
-    {
-      name: "XGBoost",
-      type: "Gradient Boosting",
-      accuracy: "Very High",
-      score: "97%",
-      reason:
-        "Strong performance for tabular data with excellent optimization.",
-    },
-    {
-      name: "Neural Network",
-      type: "Deep Learning",
-      accuracy: "High",
-      score: "91%",
-      reason:
-        "Suitable for large datasets and complex pattern recognition.",
-    },
-  ];
+  const [models, setModels] = useState([]);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/models/recommend", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({})
+    })
+      .then(res => res.json())
+      .then(data => setModels(data.models || []));
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-slate-950 text-white">
-
       <Sidebar />
 
       <main className="flex-1 p-8">
-
-        <div className="mb-10">
-
-          <div className="flex items-center gap-2 text-cyan-400">
-            <Sparkles size={22} />
-            AI Model Selection Agent
-          </div>
-
-          <h1 className="mt-3 text-4xl font-bold">
-            Model Recommendation
-          </h1>
-
-          <p className="mt-2 text-gray-400">
-            AI recommended models based on your dataset and objective.
-          </p>
-
-        </div>
-
+        <h1 className="text-4xl font-bold mb-8">
+          AI Model Recommendation
+        </h1>
 
         <div className="grid gap-6 lg:grid-cols-3">
-
           {models.map((model) => (
-
             <motion.div
               key={model.name}
-              whileHover={{ y: -8 }}
-              className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl"
+              whileHover={{ y: -5 }}
+              className="rounded-2xl border border-white/10 bg-white/5 p-6"
             >
+              <Brain className="text-cyan-400 mb-4" size={32} />
 
-              <div className="flex justify-between items-start">
-
-                <Brain
-                  className="text-cyan-400"
-                  size={34}
-                />
-
-                <span className="rounded-full bg-cyan-400/10 px-3 py-1 text-sm text-cyan-400">
-                  {model.score}
-                </span>
-
-              </div>
-
-
-              <h2 className="mt-5 text-2xl font-bold">
+              <h2 className="text-xl font-bold">
                 {model.name}
               </h2>
 
-
-              <p className="mt-2 text-cyan-400">
-                {model.type}
-              </p>
-
-
-              <p className="mt-4 text-gray-400">
+              <p className="mt-3 text-gray-300">
                 {model.reason}
               </p>
 
-
-              <div className="mt-6 flex items-center gap-2 text-green-400">
-                <CheckCircle size={18} />
-                Performance: {model.accuracy}
-              </div>
-
-
-              <button className="mt-6 w-full rounded-xl bg-cyan-500 py-3 font-semibold text-black hover:bg-cyan-400">
-                Select Model
-              </button>
-
+              <p className="mt-5 text-cyan-400 font-semibold">
+                Expected Accuracy: {model.accuracy}
+              </p>
             </motion.div>
-
           ))}
-
         </div>
-
       </main>
-
     </div>
   );
 }

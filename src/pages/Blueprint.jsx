@@ -1,37 +1,50 @@
+import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
-import {
-  FileText,
-  CheckCircle,
-  GitBranch,
-  Layers,
-  Sparkles,
-  Download,
-} from "lucide-react";
+import { FileText, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 
 function Blueprint() {
+
+  const [blueprint, setBlueprint] = useState(null);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/blueprint/generate", {
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then((data) => setBlueprint(data))
+      .catch((err) => console.log(err));
+  }, []);
+
+
+  if (!blueprint) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
+        Loading Blueprint...
+      </div>
+    );
+  }
+
+
   const sections = [
     {
-      title: "Problem Definition",
-      content:
-        "Predict student performance using historical academic and behavioral data.",
+      title: "Project",
+      content: blueprint.project,
     },
     {
-      title: "Data Pipeline",
-      content:
-        "Data collection → cleaning → feature engineering → model training.",
+      title: "Dataset",
+      content: blueprint.dataset,
     },
     {
-      title: "Model Architecture",
-      content:
-        "XGBoost classifier with hyperparameter optimization.",
+      title: "Target",
+      content: blueprint.target,
     },
     {
-      title: "Deployment Plan",
-      content:
-        "FastAPI backend with frontend integration and cloud deployment.",
+      title: "Recommended Model",
+      content: blueprint.model,
     },
   ];
+
 
   return (
     <div className="flex min-h-screen bg-slate-950 text-white">
@@ -41,89 +54,62 @@ function Blueprint() {
       <main className="flex-1 p-8">
 
         <div className="mb-10">
-
-          <div className="flex items-center gap-2 text-cyan-400">
-            <Sparkles size={22} />
-            AI Blueprint Generator
-          </div>
-
-          <h1 className="mt-3 flex items-center gap-3 text-4xl font-bold">
+          <h1 className="flex items-center gap-3 text-4xl font-bold">
             <FileText className="text-cyan-400" />
-            Project Blueprint
+            AI Generated Blueprint
           </h1>
 
           <p className="mt-2 text-gray-400">
-            Complete AI-generated project architecture and implementation plan.
+            Generated from your AI conversation.
           </p>
-
-        </div>
-
-
-        <div className="mb-8 rounded-2xl border border-white/10 bg-white/5 p-6">
-
-          <div className="flex justify-between mb-3">
-            <span className="font-semibold">
-              Blueprint Completion
-            </span>
-
-            <span className="text-cyan-400">
-              100%
-            </span>
-          </div>
-
-          <div className="h-3 rounded-full bg-slate-800">
-            <div className="h-3 w-full rounded-full bg-cyan-500" />
-          </div>
-
         </div>
 
 
         <div className="grid gap-6 lg:grid-cols-2">
 
-          {sections.map((section, index) => (
-
+          {sections.map((section) => (
             <motion.div
               key={section.title}
-              whileHover={{ y: -6 }}
+              whileHover={{ y: -5 }}
               className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl"
             >
 
-              <div className="flex items-center gap-3">
+              <h2 className="text-xl font-bold">
+                {section.title}
+              </h2>
 
-                {index % 2 === 0 ? (
-                  <GitBranch className="text-cyan-400" />
-                ) : (
-                  <Layers className="text-cyan-400" />
-                )}
-
-                <h2 className="text-xl font-bold">
-                  {section.title}
-                </h2>
-
-              </div>
-
-
-              <p className="mt-4 text-gray-400">
-                {section.content}
+              <p className="mt-4 text-gray-300">
+                {section.content || "Not available"}
               </p>
 
-
               <div className="mt-5 flex items-center gap-2 text-green-400">
-                <CheckCircle size={18} />
-                Completed
+                <CheckCircle size={18}/>
+                Generated
               </div>
 
             </motion.div>
-
           ))}
 
         </div>
 
 
-        <button className="mt-10 flex items-center gap-2 rounded-xl bg-cyan-500 px-8 py-3 font-semibold text-black hover:bg-cyan-400">
-          <Download size={18} />
-          Export Blueprint
-        </button>
+        <div className="mt-10 rounded-2xl border border-white/10 bg-white/5 p-6">
+
+          <h2 className="text-xl font-bold mb-4">
+            ML Pipeline
+          </h2>
+
+          <div className="space-y-3 text-gray-300">
+
+            {blueprint.pipeline.map((step) => (
+              <div key={step}>
+                ✓ {step}
+              </div>
+            ))}
+
+          </div>
+
+        </div>
 
 
       </main>

@@ -1,21 +1,21 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-import { Bot, Send } from "lucide-react";
+import { Send } from "lucide-react";
 import { motion } from "framer-motion";
 
+
 function Chat() {
+
+  const navigate = useNavigate();
 
   const [message, setMessage] = useState("");
 
   const [messages, setMessages] = useState([
     {
-      sender: "AI Agent",
-      text: "Hello! I'll help you create your AI project blueprint.",
-    },
-    {
-      sender: "AI Agent",
-      text: "What is the main objective of your machine learning project?",
-    },
+      role: "ai",
+      text: "Hello! Tell me what AI project you want to build."
+    }
   ]);
 
 
@@ -24,14 +24,14 @@ function Chat() {
     if (!message.trim()) return;
 
 
-    const userText = message;
+    const userMessage = message;
 
 
-    setMessages((prev)=>[
+    setMessages((prev) => [
       ...prev,
       {
-        sender:"You",
-        text:userText
+        role: "user",
+        text: userMessage
       }
     ]);
 
@@ -42,14 +42,14 @@ function Chat() {
     try {
 
       const response = await fetch(
-        "http://localhost:8000/chat",
+        "http://127.0.0.1:8000/chat/",
         {
-          method:"POST",
-          headers:{
-            "Content-Type":"application/json"
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
           },
-          body:JSON.stringify({
-            message:userText
+          body: JSON.stringify({
+            message: userMessage
           })
         }
       );
@@ -58,22 +58,31 @@ function Chat() {
       const data = await response.json();
 
 
-      setMessages((prev)=>[
+      setMessages((prev) => [
         ...prev,
         {
-          sender:"AI Agent",
-          text:data.reply
+          role: "ai",
+          text: data.reply
         }
       ]);
 
 
-    } catch(error) {
+      if (data.blueprint_ready) {
 
-      setMessages((prev)=>[
+        setTimeout(() => {
+          navigate("/blueprint");
+        }, 1000);
+
+      }
+
+
+    } catch (error) {
+
+      setMessages((prev) => [
         ...prev,
         {
-          sender:"AI Agent",
-          text:"Unable to connect with AI backend."
+          role: "ai",
+          text: "Backend connection failed."
         }
       ]);
 
@@ -82,7 +91,19 @@ function Chat() {
   }
 
 
+
+  function handleKeyPress(e) {
+
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+
+  }
+
+
+
   return (
+
     <div className="flex min-h-screen bg-slate-950 text-white">
 
       <Sidebar />
@@ -91,50 +112,42 @@ function Chat() {
       <main className="flex-1 p-8">
 
 
-        <div className="mb-8">
-
-          <h1 className="text-4xl font-bold">
-            AI Clarification Chat
-          </h1>
-
-          <p className="mt-2 text-gray-400">
-            Discuss your project requirements with AI agents.
-          </p>
-
-        </div>
+        <h1 className="text-4xl font-bold mb-8">
+          AI Project Builder
+        </h1>
 
 
 
-        <div className="flex h-[70vh] flex-col rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl">
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 h-[70vh] flex flex-col">
 
 
-          <div className="flex-1 space-y-5 overflow-y-auto p-6">
+          <div className="flex-1 overflow-y-auto space-y-4">
 
 
             {messages.map((msg,index)=>(
 
               <motion.div
+
                 key={index}
+
                 initial={{opacity:0,y:10}}
+
                 animate={{opacity:1,y:0}}
-                className="max-w-2xl rounded-2xl bg-slate-900 p-5"
+
+                className={
+                  msg.role==="user"
+                  ?
+                  "ml-auto max-w-xl bg-cyan-500 text-black p-4 rounded-xl"
+                  :
+                  "max-w-xl bg-white/10 p-4 rounded-xl"
+                }
+
               >
 
-                <div className="mb-2 flex items-center gap-2 text-cyan-400">
-
-                  <Bot size={18}/>
-
-                  {msg.sender}
-
-                </div>
-
-
-                <p>
-                  {msg.text}
-                </p>
-
+                {msg.text}
 
               </motion.div>
+
 
             ))}
 
@@ -143,38 +156,37 @@ function Chat() {
 
 
 
-          <div className="border-t border-white/10 p-5">
-
-            <div className="flex gap-4">
+          <div className="flex gap-3 mt-5">
 
 
-              <input
-                value={message}
-                onChange={(e)=>setMessage(e.target.value)}
-                onKeyDown={(e)=>{
-                  if(e.key==="Enter")
-                    sendMessage();
-                }}
-                placeholder="Type your answer..."
-                className="flex-1 rounded-xl bg-slate-900 px-5 py-3 outline-none focus:ring-2 focus:ring-cyan-500"
-              />
+            <input
+
+              value={message}
+
+              onChange={(e)=>setMessage(e.target.value)}
+
+              onKeyDown={handleKeyPress}
+
+              placeholder="Describe your AI project..."
+
+              className="flex-1 rounded-xl bg-white/10 border border-white/10 px-5 py-3 outline-none"
+
+            />
 
 
-              <button
 
-                onClick={sendMessage}
+            <button
 
-                className="flex items-center gap-2 rounded-xl bg-cyan-500 px-6 font-semibold text-black hover:bg-cyan-400"
-              >
+              onClick={sendMessage}
 
-                <Send size={18}/>
+              className="rounded-xl bg-cyan-500 px-5 text-black"
 
-                Send
+            >
 
-              </button>
+              <Send />
 
+            </button>
 
-            </div>
 
           </div>
 
@@ -186,7 +198,9 @@ function Chat() {
 
 
     </div>
+
   );
+
 }
 
 
