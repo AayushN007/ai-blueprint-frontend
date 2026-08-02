@@ -42,7 +42,7 @@ function Chat() {
     try {
 
       const response = await fetch(
-        "http://127.0.0.1:8000/chat/",
+        "https://ai-blueprint-backend-v3x5.onrender.com/chat/",
         {
           method: "POST",
           headers: {
@@ -62,7 +62,7 @@ function Chat() {
         ...prev,
         {
           role: "ai",
-          text: data.reply
+          text: data.reply || "Blueprint generated successfully."
         }
       ]);
 
@@ -77,6 +77,8 @@ function Chat() {
 
 
     } catch (error) {
+
+      console.log(error);
 
       setMessages((prev) => [
         ...prev,
@@ -130,12 +132,18 @@ function Chat() {
 
                 key={index}
 
-                initial={{opacity:0,y:10}}
+                initial={{
+                  opacity:0,
+                  y:10
+                }}
 
-                animate={{opacity:1,y:0}}
+                animate={{
+                  opacity:1,
+                  y:0
+                }}
 
                 className={
-                  msg.role==="user"
+                  msg.role === "user"
                   ?
                   "ml-auto max-w-xl bg-cyan-500 text-black p-4 rounded-xl"
                   :
