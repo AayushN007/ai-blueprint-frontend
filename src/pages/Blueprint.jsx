@@ -8,12 +8,21 @@ function Blueprint() {
   const [blueprint, setBlueprint] = useState(null);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/blueprint/generate", {
+    fetch("https://ai-blueprint-backend-v3x5.onrender.com/blueprint/generate", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        project: "AI Blueprint Generator",
+        dataset: "User Dataset",
+        target: "Prediction Target"
+      }),
     })
       .then((res) => res.json())
       .then((data) => setBlueprint(data))
       .catch((err) => console.log(err));
+
   }, []);
 
 
@@ -101,7 +110,7 @@ function Blueprint() {
 
           <div className="space-y-3 text-gray-300">
 
-            {blueprint.pipeline.map((step) => (
+            {blueprint.pipeline?.map((step) => (
               <div key={step}>
                 ✓ {step}
               </div>
