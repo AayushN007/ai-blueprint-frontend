@@ -6,7 +6,7 @@ function ProjectHistory() {
   const [projects, setProjects] = useState([]);
 
   async function loadProjects() {
-    const res = await fetch("http://127.0.0.1:8000/projects/");
+    const res = await fetch("https://ai-blueprint-backend-v3x5.onrender.com/projects/");
     const data = await res.json();
     setProjects(data);
   }

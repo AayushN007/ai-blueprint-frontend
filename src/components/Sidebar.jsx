@@ -5,13 +5,14 @@ import {
   Brain,
   FileText,
   Download,
+  FolderOpen,
   Sparkles,
 } from "lucide-react";
-
 import { NavLink, Link } from "react-router-dom";
 
 function Sidebar() {
   const menu = [
+    { name: "Project History", icon: FolderOpen, path: "/history" },
     { name: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
     { name: "Create Project", icon: FolderPlus, path: "/create-project" },
     { name: "Datasets", icon: Database, path: "/datasets" },
