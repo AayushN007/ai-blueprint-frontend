@@ -9,7 +9,7 @@ import Blueprint from "./pages/Blueprint";
 import DatasetRecommendation from "./pages/DatasetRecommendation";
 import ModelRecommendation from "./pages/ModelRecommendation";
 import DownloadCenter from "./pages/DownloadCenter";
-
+import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +47,10 @@ const router = createBrowserRouter([
   {
     path: "/history",
     element: <ProjectHistory />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
